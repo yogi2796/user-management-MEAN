@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  mat-card {
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  mat-list-item {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ccc;
+  }
+  

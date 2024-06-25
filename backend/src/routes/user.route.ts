@@ -4,10 +4,10 @@ import { authenticateJWT } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.get('/profile/:id', authenticateJWT, getUserProfile);
+router.get('/profile', authenticateJWT, getUserProfile);
 router.put('/profile/:id', authenticateJWT, updateUserProfile);
 router.delete('/profile/:id', authenticateJWT, deleteUserProfile);
-router.get('/', authenticateJWT, listUsers);
-router.get('/history/:id', authenticateJWT, getUserLoginHistory);
+router.get('/list', authenticateJWT, listUsers);
+router.get('/history', authenticateJWT, getUserLoginHistory);
 
 export default router;

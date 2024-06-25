@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
 import LoginHistory from "../models/loginHistory.model";
+import mongoose from "mongoose";
 
 export const getUserProfile = async (req: any, res: Response) => {
 	try {
-		const id = req.params.id;
+		const id = req.user._id;
 		const user = await User.findById(id).select("-password");
 		if (!user) return res.status(404).json({ message: "User not found" });
 		res.json(user);
@@ -48,10 +49,35 @@ export const listUsers = async (req: Request, res: Response) => {
 	}
 };
 
-export const getUserLoginHistory = async (req: Request, res: Response) => {
+export const getUserLoginHistory = async (req: any, res: Response) => {
 	try {
-		const id = req.params.id;
-		const loginHistory = await LoginHistory.find({ userId: id });
+		const id = req.user?._id;
+		const loginHistory = await LoginHistory.aggregate([
+			{
+				$match: { userId: new mongoose.Types.ObjectId(id) },
+			},
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'userId',
+					foreignField: '_id',
+					as: 'userId'
+				}
+			},
+			{
+				$project: {
+					_id: 1,
+					ipAddress: 1,
+					userId: {
+						_id: 1,
+						name: 1,
+						email: 1,
+						phone: 1 
+					},
+					loginAt: 1
+				}
+			}
+		]);
 		res.json(loginHistory);
 	} catch (error: any) {
 		res.status(400).json({ message: error.message });

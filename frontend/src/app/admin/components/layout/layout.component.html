@@ -1,0 +1,9 @@
+<button mat-raised-button color="primary" type="submit" (click)="logout()">Logout</button>
+<mat-tab-group>
+    <mat-tab label="My Profile"><app-user-profile (userData)="userData($event)"></app-user-profile></mat-tab>
+    @if (_userData?.isAdmin) {
+      <mat-tab label="User lists"> <app-user-list></app-user-list> </mat-tab>
+    }
+    <mat-tab label="Login Activity"> <app-login-history></app-login-history> </mat-tab>
+  </mat-tab-group>
+  
